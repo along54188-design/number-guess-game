@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜数字游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .game-container {
+            background-color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #d9534f;
+        }
+
+        .correct {
+            color: #5cb85c;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>猜数字游戏</h1>
+        <p>猜一个 1 到 100 之间的数字：</p>
+        <input type="number" id="guessInput" min="1" max="100">
+        <button onclick="checkGuess()">提交猜测</button>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const secretNumber = Math.floor(Math.random() * 100) + 1;
+        const messageElement = document.getElementById('message');
+        const guessInput = document.getElementById('guessInput');
+
+        function checkGuess() {
+            const userGuess = Number(guessInput.value);
+
+            if (userGuess < 1 || userGuess > 100 || isNaN(userGuess)) {
+                setMessage("请输入一个 1 到 100 之间的有效数字！", false);
+                return;
+            }
+
+            if (userGuess === secretNumber) {
+                setMessage(`恭喜！你猜对了！数字就是 ${secretNumber}。`, true);
+                disableGame();
+            } else if (userGuess < secretNumber) {
+                setMessage("太低了！请再试一次。", false);
+            } else {
+                setMessage("太高了！请再试一次。", false);
+            }
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        function setMessage(msg, isCorrect) {
+            messageElement.textContent = msg;
+            if (isCorrect) {
+                messageElement.classList.add('correct');
+            } else {
+                messageElement.classList.remove('correct');
+            }
+        }
+
+        function disableGame() {
+            guessInput.disabled = true;
+            document.querySelector('button').disabled = true;
+        }
+    </script>
+</body>
+</html>
